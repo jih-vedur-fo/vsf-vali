@@ -1,0 +1,53 @@
+// Wind generator for FVCOM 4.3 (Only works for 4.3 at this stage)
+// VSF
+// Jari í Hjøllum, Knud Simonsen
+// Version 1.6 11-06-2024
+//
+netcdf ##Casename##_wnd {
+    dimensions:
+        nele             = ##nele## ;
+        node             = ##node## ;
+        one              = 1 ;
+        three            = 3 ;
+        time             = UNLIMITED ; // (##timenodes## currently)
+        DateStrLen = 26 ;
+    variables:
+        float time(time) ;
+            time:long_name = "time" ;
+            time:units = "days since 1858-11-17 00:00:00" ;
+            time:format = "modified julian day (MJD)" ;
+            time:time_zone = "##time_zone##" ;
+        int Itime(time) ;
+			Itime:long_name = "itime" ;
+            time:units = "days since 1858-11-17 00:00:00" ;
+            time:format = "modified julian day (MJD)" ;
+            time:time_zone = "##time_zone##" ;
+        int Itime2(time) ;
+			Itime:long_name = "itime2" ;
+            Itime2:units = "msec since 00:00:00" ;
+            Itime2:time_zone = "##time_zone##" ;
+        float uwind_speed(time, nele) ;
+            uwind_speed:long_name = "Eastward Wind Speed" ;
+            uwind_speed:standard_name = "Wind Speed" ;
+            uwind_speed:units = "m/s" ;
+            uwind_speed:grid = "fvcom_grid" ;
+            uwind_speed:type = "data" ;
+        float vwind_speed(time, nele) ;
+            vwind_speed:long_name = "Northward Wind Speed" ;
+            vwind_speed:standard_name = "Wind Speed" ;
+            vwind_speed:units = "m/s" ;
+            vwind_speed:grid = "fvcom_grid";
+            vwind_speed:type = "data" ;
+            
+    // global attributes:
+            :title = "\'AN FVCOM CASE DESCRIPTION\' - note string must be in \'quotes\'" ;
+            :institution = "VSF" ;
+            :source = "FVCOM grid (unstructured) surface forcing" ;
+            :history = "N/A" ;
+            :CoordinateSystem = "Cartesian" ;
+            :Version = "##VersionString##";
+            :ThisFile = "##ThisFileString##";
+
+            
+##data##
+        }

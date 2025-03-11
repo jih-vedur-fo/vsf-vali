@@ -1,0 +1,57 @@
+// BASE FILE for
+// Particle tracking generator for FVCOM 
+// Tested for version FVCOM 5.0.1 (intel)
+// Build: ifvcom501.wd.river.lag (@fvcom-u18-skeid)
+// COSUrFI 2024
+// Jari í Hjøllum, Knud Simonsen
+// Version 1.4 30-05-2024
+//
+netcdf ##Casename##_lag {
+dimensions:
+	nparticles = ##nparticles## ;
+variables:
+	float x(nparticles) ;
+		x:long_name = "particle x position" ;
+		x:units = "m" ;
+	float y(nparticles) ;
+		y:long_name = "particle y position" ;
+		y:units = "m" ;
+	float z(nparticles) ;
+		z:long_name = "particle z position" ;
+		z:units = "m" ;
+	float tbeg(nparticles) ;
+		tbeg:long_name = "particle release time" ;
+		tbeg:units = "days since 0.0" ;
+		tbeg:format = "modified julian day (MJD)" ;
+		tbeg:time_zone = "##time_zone##" ;
+	float tend(nparticles) ;
+		tend:long_name = "particle release time" ;
+		tend:units = "days since 0.0" ;
+		tend:format = "modified julian day (MJD)" ;
+		tend:time_zone = "##time_zone##" ;
+	float pathlength(nparticles) ;
+		pathlength:long_name = "particle integrated path length" ;
+		pathlength:units = "m" ;
+	int group(nparticles) ;
+		group :long_name = "particle group" ;
+		group :units = "-" ;
+	int mark(nparticles) ;
+		mark:long_name = "particle marker (0=in domain)" ;
+		mark:units = "-" ;
+
+// global attributes:
+            :title = "##title##" ;
+            :institution = "VSF" ;
+            :source = "FVCOM grid (unstructured) surface forcing" ;
+            :history = "N/A" ;
+            :CoordinateSystem = "Cartesian" ;
+            :Version = "##VersionString##";
+            :ThisFile = "##ThisFileString##";
+            :info_string = "particle tracking testing" ;
+            :dump_counter = 0 ;
+            :t_last_dump = 0.f ;
+            :number_particles = 10 ;
+            
+            
+##data##
+}

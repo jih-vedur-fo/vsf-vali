@@ -1,0 +1,80 @@
+// BASE FILE for
+// Particle tracking generator for FVCOM 
+// Tested for version FVCOM 5.0.1 (intel)
+// Build: ifvcom501.wd.river.lag (@fvcom-u18-skeid)
+// COSUrFI 2024
+// Jari í Hjøllum, Knud Simonsen
+// Version 1.4 30-05-2024
+//
+netcdf tse_lag {
+dimensions:
+	nparticles = 10 ;
+variables:
+	float x(nparticles) ;
+		x:long_name = "particle x position" ;
+		x:units = "m" ;
+	float y(nparticles) ;
+		y:long_name = "particle y position" ;
+		y:units = "m" ;
+	float z(nparticles) ;
+		z:long_name = "particle z position" ;
+		z:units = "m" ;
+	float tbeg(nparticles) ;
+		tbeg:long_name = "particle release time" ;
+		tbeg:units = "days since 0.0" ;
+		tbeg:format = "modified julian day (MJD)" ;
+		tbeg:time_zone = "none" ;
+	float tend(nparticles) ;
+		tend:long_name = "particle release time" ;
+		tend:units = "days since 0.0" ;
+		tend:format = "modified julian day (MJD)" ;
+		tend:time_zone = "none" ;
+	float pathlength(nparticles) ;
+		pathlength:long_name = "particle integrated path length" ;
+		pathlength:units = "m" ;
+	int group(nparticles) ;
+		group :long_name = "particle group" ;
+		group :units = "-" ;
+	int mark(nparticles) ;
+		mark:long_name = "particle marker (0=in domain)" ;
+		mark:units = "-" ;
+
+// global attributes:
+            :title = "TestbedEstuary tse0001_run02, test with particles at 1 m depth." ;
+            :institution = "NVD - COSUrFI" ;
+            :source = "FVCOM grid (unstructured) surface forcing" ;
+            :history = "N/A" ;
+            :CoordinateSystem = "Cartesian" ;
+            :Version = "BuildParticleTracking v. 1.4 by Jari í Hjøllum, 2024";
+            :ThisFile = "This file was generated at 30-05-2024, 12:59:04 | 1717070344675.531 ms since 1, 1970, 00:00:00 (UTC)";
+            :info_string = "particle tracking testing" ;
+            :dump_counter = 0 ;
+            :t_last_dump = 0.f ;
+            :number_particles = 10 ;
+            
+            
+	data: 
+		x = 
+			253876.000000, 253876.000000, 253876.000000, 253876.000000, 253876.000000, 253876.000000, 253876.000000, 253876.000000, 253876.000000, 253876.000000;
+
+		y = 
+			153619.000000, 153619.000000, 153619.000000, 153619.000000, 153619.000000, 153619.000000, 153619.000000, 153619.000000, 153619.000000, 153619.000000;
+
+		z = 
+			-1.000000, -1.000000, -1.000000, -1.000000, -1.000000, -1.000000, -1.000000, -1.000000, -1.000000, -1.000000;
+
+		tbeg = 
+			54110.000000, 54110.000000, 54110.000000, 54110.000000, 54110.000000, 54110.000000, 54110.000000, 54110.000000, 54110.000000, 54110.000000;
+
+		tend = 
+			54120.000000, 54120.000000, 54120.000000, 54120.000000, 54120.000000, 54120.000000, 54120.000000, 54120.000000, 54120.000000, 54120.000000;
+
+		pathlength = 
+			0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000;
+
+		group = 
+			1, 1, 1, 1, 1, 1, 1, 1, 1, 1;
+
+		mark = 
+			1, 1, 1, 1, 1, 1, 1, 1, 1, 1;
+}
