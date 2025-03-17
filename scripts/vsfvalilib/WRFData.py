@@ -5,12 +5,14 @@ from datetime import datetime
 
 class WRFData:
     #====================================================
-    def __init__(self, filename=None, fields=["all"]):
+    def __init__(self, filename=None, verbose=False, fields=["all"]):
         """
         Constructor for WRFData class.
         :param filename: Optional filename of the NetCDF file to load.
         :param fields: List of fields to load from the NetCDF file. Default is ["all"].
         """
+        self.verbose = verbose
+
         self.filename = filename
         self.fhandle = None
         self.fields = fields
@@ -31,6 +33,11 @@ class WRFData:
         self.t2 = None
         self.t2_loaded = False
         self.t2_unit = None
+
+        self.slp = None
+        self.slp_loaded = False
+        self.slp_unit = None
+
 
         self.u10 = None
         self.u10_loaded = False
@@ -60,7 +67,14 @@ class WRFData:
             self.loadFile(self.filename)
     # def END
     #
+    #====================================================
+    # Returns the number of datapoint in this dataset.
+    def getDPCount(self):
+        #return len(self.times)
+        return 1
 
+    # def END
+    #
     #====================================================
     def displayInfo(self):
         for dimension in self.fhandle.dimensions.values():
@@ -77,12 +91,15 @@ class WRFData:
         """
         try:
             self.fhandle = nc.Dataset(filename, mode='r')
-            print(f"Successfully loaded {filename}")
+            if self.verbose:    print(f"Successfully loaded {filename}")
 
             self.loadTimes()
 
             if "t2" in self.fields or "all" in self.fields:
                 self.t2, self.t2_unit, self.t2_loaded = self.loadField("T2")
+
+            if "slp" in self.fields or "all" in self.fields:
+                self.slp, self.slp_unit, self.slp_loaded = self.loadField("T2")
 
             if "u10" in self.fields or "all" in self.fields:
                 self.u10, self.u10_unit, self.u10_loaded = self.loadField("U10")
@@ -119,7 +136,7 @@ class WRFData:
             unit = varx.getncattr("units") if "units" in varx.ncattrs() else None
             res = True
 
-            print(f"Successfully loaded field: {field} ({unit}, {val.shape})")
+            if self.verbose: print(f"Successfully loaded field: {field} ({unit}, {val.shape})")
         else:
             print(f"Error: Field '{field}' not found in the fhandle.")
             val, unit = None, None

@@ -1,0 +1,22 @@
+
+location: lon lat h osfr.. (Tórshavn)
+
+Modell:
+lon =
+lat =
+h  =
+
+
+Variables:
+t2
+u10
+v10
+slp - sea level press
+(llp - location level press )
+dpt2 - dew point pressure
+sky hædd (undir síða)
+cloud cover
+visibility
+
+
+prepc. = rain + snow
