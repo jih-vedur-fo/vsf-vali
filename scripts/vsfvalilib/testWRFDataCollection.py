@@ -2,6 +2,7 @@ from WRFDataCollection import WRFDataCollection
 
 # Path for a specific day's WRF data (e.g., January 13, 2025)
 base_path = "/opt/vsfvali/data/wrf/area1/2025/01/12/"
+base_path = "/opt/vsfvali/data/wrf/area1/"
 
 # Create a collection for the day's data
 wrf_collection = WRFDataCollection(base_path,True)
