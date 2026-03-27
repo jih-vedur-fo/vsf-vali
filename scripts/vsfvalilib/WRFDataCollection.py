@@ -2,6 +2,7 @@ import os
 import numpy as np
 from datetime import datetime, timedelta
 from WRFDataTS import WRFDataTS
+from DataSeries import DataSeries
 
 class WRFDataCollection:
     def __init__(self, basepath, verbose=False):
@@ -15,7 +16,8 @@ class WRFDataCollection:
         self.basepath = basepath  # The folder just above 2025/01/27
         self.dirlist = [] # list of folder containg dateset to be loaded.
         self.datafields = ["all"]  # Ensure all data fields are loaded.
-        self.wrfts = None  # Dictionary to store WRFDataTS objects with folder names as keys
+        self.modelruns = ["00","06","12","18"]
+        self.wrfts = []
         self.subfolderpaths = []  # List to store full paths of subfolders
         self.subfoldernames = []  # List to store only the names of subfolders
 
@@ -24,7 +26,8 @@ class WRFDataCollection:
 
         #self.loadSubfolders(self.verbose)
     # def END
-
+    #
+    #=======================================================
     def loadSubfolders(self, verbose):
         """
         Iterates through all subdirectories in basepath and initializes WRFDataTS for each.
@@ -44,16 +47,26 @@ class WRFDataCollection:
                 self.subfoldernames.append(foldername)
 
                 try:
-                    wrfts.append(WRFDataTS(folderpath, verbose))
+                    wrfts.append(WRFDataTS(folderpath, verbose,self.datafields))
                     print(f"Loaded WRFDataTS for {foldername}")
                 except Exception as e:
                     print(f"Failed to load WRFDataTS for {foldername}: {e}")
+            else:
+                print("WARNING: {} is not a found folder...".format(folderpath))
+
             # if END
         # for END
         self.wrfts = np.array(wrfts)
     # def END
-
-    def load_date_range(self, start_date, end_date):
+    #
+    #=======================================================
+    def setDateRange(self, start_date, end_date):
+        self.startDate = start_date.replace(tzinfo=UTC)
+        self.endDate   = end_date.replace(tzinfo=UTC)
+    # def END
+    #
+    #=======================================================
+    def loadWRFData(self):
         """
         Loads data for a date range (exclusive of the end date).
 
@@ -62,16 +75,16 @@ class WRFDataCollection:
         """
         try:
             print("Start datetime: {}".format(start_date))
-            start = datetime.strftime(start_date, "%Y/%m/%d/")
-            print("Start string  : {}".format(start))
-            end = datetime.strftime(end_date, "%Y/%m/%d/")
-            print("End string   : {}".format(end))
+            sStartDate = datetime.strftime(start_date, "%Y/%m/%d/")
+            print("Start date  : {}".format(sStartDate))
+            sEndDate = datetime.strftime(end_date, "%Y/%m/%d/")
+            print("End date    : {}".format(sEndDate))
             current_date = start_date
             while current_date < end_date:
-                for item in ["00","06"]:
+                for item in self.modelruns:
                     folder_path =  os.path.join(self.basepath,datetime.strftime(current_date, "%Y/%m/%d/"),item)
                     #folder_path = os.path.join(self.basepath, current.strftime("%Y"), current.strftime("%m"), current.strftime("%d"))
-                    print(folder_path)
+                    #print(folder_path)
                     if os.path.isdir(folder_path):
                         print(f"Adding folder to load list from: {folder_path}")
                         self.dirlist.append(folder_path)
@@ -86,7 +99,8 @@ class WRFDataCollection:
         # try END
         self.loadSubfolders(True)
     # def END
-
+    #
+    #=======================================================
     def get_data_set(self, index):
         """
         Retrieves the WRFDataTS object for a given subfolder.
@@ -94,12 +108,37 @@ class WRFDataCollection:
         :return: WRFDataTS instance or None if not found.
         """
         return self.wrfts[index]
-
+    # def END
+    #
+    #=======================================================
     def list_data_sets(self):
         """
         Returns a list of all loaded dataset names.
         """
         return list(self.subfoldernames)
-
+    # def END
+    #
+    #=======================================================
+    def setFields(self, fields=["all"]):
+        if fields:
+            self.datafields = fields
+        else:
+            self.datafields = ["all"]
+        # if END
+    # def END
+    #
+    #=======================================================
+    def getDataSeries(self):
+        ds = DataSeries()
+        x = self.wrfts[0].mjd
+        y =  [ self.wrfts[0].t2[:,100,100], self.wrfts[0].t2[:,105,105], self.wrfts[0].t2[:,110,110], self.wrfts[0].t2[:,115,115] ]
+        ds.addData(x,y)
+        ds.plot(title="T2", xlabel="Time", ylabel="Measurement")
+    # def END
+    #
+    #=======================================================
     def __repr__(self):
         return f"WRFDataCollection(basepath={self.basepath}, datasets={list(self.subfoldernames)})"
+    # def END
+    #
+    #=======================================================

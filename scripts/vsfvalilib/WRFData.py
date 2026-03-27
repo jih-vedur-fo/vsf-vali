@@ -65,6 +65,7 @@ class WRFData:
 
         if self.filename:
             self.loadFile(self.filename)
+        # if END
     # def END
     #
     #====================================================
@@ -89,6 +90,7 @@ class WRFData:
         Loads a NetCDF file and retrieves the specified fields.
         :param filename: Path to the NetCDF file.
         """
+
         try:
             self.fhandle = nc.Dataset(filename, mode='r')
             if self.verbose:    print(f"Successfully loaded {filename}")
